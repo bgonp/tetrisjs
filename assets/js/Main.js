@@ -25,9 +25,11 @@ class Main {
 		Main.repeating = null;
 		Main.interval = 0;
 		Main.timeout = 0;
+		Main.blocked = false;
 
 		Board.init();
 		Main.initSettings();
+		Main.initAlert();
 
 		$('#container .buttons').accordion({
 			active: false,
@@ -36,12 +38,21 @@ class Main {
 		});
 
 		$('#container .start').click((e) => {
-			Main.clear();
-			Board.start();
 			e.preventDefault();
+			if (Board.playing) {
+				Main.alert('This will end your current game. Are you sure?', () => {
+					Board.finish();
+					Main.clear();
+					Board.start();
+				});
+			} else if (!Board.playing) {
+				Main.clear();
+				Board.start();
+			}
 		});
 
 		win.keydown((e) => {
+			if (Main.blocked) return;
 			if (!Board.playing) {
 				if (e.key === 's') {
 					Main.clear();
@@ -96,11 +107,15 @@ class Main {
 	}
 
 	static initSettings() {
+		var message = 'You will can change settings once your current game has been finished';
 		$('#container .settings-content .auto-switch a').click(function(e) {
 			e.preventDefault();
-			if (Board.playing) return;
-			autoSwitch = !autoSwitch;
-			$(this).toggleClass('selected');
+			if (Board.playing) {
+				Main.alert(message);
+			} else {
+				autoSwitch = !autoSwitch;
+				$(this).toggleClass('selected');
+			}
 		});
 		$('#container .settings-content .tetromino').each(function() {
 			let tetromino = $(this);
@@ -111,16 +126,40 @@ class Main {
 				if (value[block.data('position')] === '1')
 					block.addClass('selected');
 				block.click(function(e) {
-					e.preventDefault();
-					if (Board.playing) return;
 					let block = $(this);
-					let index = block.parent().data('index');
-					let position = block.data('position');
-					shapes[index] += (block.hasClass('selected')?-1:1)*Math.pow(2, 7-position);
-					block.toggleClass('selected');
+					e.preventDefault();
+					if (Board.playing) {
+						Main.alert(message);
+					} else if (!block.hasClass('selected') || block.parent().find('.selected').length > 2) {
+						let index = block.parent().data('index');
+						let position = block.data('position');
+						shapes[index] += (block.hasClass('selected')?-1:1)*Math.pow(2, 7-position);
+						block.toggleClass('selected');
+					}
 				});
 			});
 		});
+	}
+
+	static initAlert() {
+		Main.alertBox = $('#container .alert');
+		Main.alertBox.find('.close, .cancel, .ok').click(() => {
+			Main.alertBox.fadeOut(50);
+			Main.blocked = false;
+		});
+		Main.alertBox.find('.ok').click(() => Main.confirmed());
+	}
+
+	static alert(message, callback = false) {
+		Main.blocked = true;
+		if (Board.playing && !Board.paused) Board.pause();
+		Main.alertBox.fadeIn(50).find('.text').text(message);
+		if (!callback) {
+			Main.alertBox.removeClass('confirmable');
+		} else {
+			Main.confirmed = callback;
+			Main.alertBox.addClass('confirmable');
+		}
 	}
 	
 }

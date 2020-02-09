@@ -55,7 +55,7 @@ class Board {
 	static pause() {
 		if (!Board.playing) return;
 		Board.paused = Board.tetromino.pause();
-		Board.container.find('.block').fadeToggle(30);
+		Board.container.find('.block').fadeToggle(0);
 		Board.message(Board.paused ? 'PAUSED' : false);
 		Main.accordion(Board.paused);
 	}

@@ -41,14 +41,14 @@
 					<p><strong>Down arrow</strong><br>Move blocks fast down</p>
 					<p><strong>Space</strong><br>Translate blocks to the bottom</p>
 					<p><strong>Up Arrow</strong><br>Rotate blocks</p>
-					<p><strong>C key</strong><br>Switch between boards</p>
+					<p><strong>C key</strong><br>Switch between boards (only with auto switch off)</p>
 					<p><strong>Escape</strong><br>Pause the game</p>
 					<p><strong>S key</strong><br>Start a new game</p>
 				</div>
 				<a href="#" class="settings">SETTINGS</a>
 				<div class="settings-content">
 					<div class="auto-switch"><a href="#"></a><label>Auto-switch mode</label></div>
-					<p>Create your custom tetrominos</p>
+					<p>Create your custom tetrominos<br>(min 2 blocks)</p>
 					<div class="tetromino" data-index="0">
 						<a href="#" data-position="0"></a>
 						<a href="#" data-position="1"></a>
@@ -123,6 +123,14 @@
 			</div>
 		</div>
 		<div class="modal"></div>
+		<div class="alert" style="display: none">
+			<div class="content">
+				<a href="#" class="close"></a>
+				<p class="text"></p>
+				<button type="button" class="ok">OK</button>
+				<button type="button" class="cancel">CANCEL</button>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

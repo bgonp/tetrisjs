@@ -41,6 +41,81 @@ p {
 	vertical-align: top;
 	min-width: 1rem;
 }
+#container .alert {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.6);
+	z-index: 10;
+}
+#container .alert .content {
+	position: absolute;
+	top: 16rem;
+	left: 50%;
+	max-width: 50rem;
+	transform: translate(-50%, 0);
+	background: #FFFFFF;
+	padding: 2rem 3rem 2rem 2rem;
+	border-top: 1px solid rgba(0,0,0,.1);
+	border-radius: 3px;
+	box-shadow: 0 0 1rem rgba(0,0,0,.3);
+	z-index: 10;
+}
+#container .alert .content .close {
+	position: absolute;
+	top: -1rem;
+	right: -1rem;
+	width: 3rem;
+	height: 3rem;
+	background: #FFD836;
+	border-radius: 50%;
+	box-shadow: 0 0 1rem rgba(0,0,0,.5);
+}
+#container .alert .content .close::before,
+#container .alert .content .close::after {
+    content: '';
+    position: absolute;
+    top: .5rem;
+    left: 1.25rem;
+    background: #494949;
+    width: .5rem;
+    height: 2rem;
+    border-radius: 3px;
+	transform: rotate(-45deg);
+}
+#container .alert .content .close::after {
+	transform: rotate(45deg);
+}
+#container .alert .content .ok,
+#container .alert .content .cancel {
+	display: none;
+}
+#container .alert.confirmable .content .ok,
+#container .alert.confirmable .content .cancel {
+	display: block;
+	float: left;
+	font-family: 'Play', sans-serif;
+	font-size: 1.6rem;
+	line-height: 2.5rem;
+	text-align: center;
+	width: 8rem;
+	box-shadow: none;
+    padding: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 3px;
+    margin: 1.6rem 1rem 0 0;
+    background: #FFD836;
+    cursor: pointer;
+}
+#container .alert.confirmable .content .cancel {
+	background: #BBCCDD;
+}
+#container .alert .content .text {
+	font-size: 1.6rem;
+	margin: 0;
+}
 #container .panel {
 	position: absolute;
 	top: 0;
@@ -201,7 +276,7 @@ p {
 	right: -2px;
 	bottom: -2px;
 	left: -2px;
-	background: #BCD;
+	background: #BBCCDD;
 	border-radius: 2px;
 	z-index: 2;
 }
@@ -211,7 +286,7 @@ p {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: #BCD;
+	background: #BBCCDD;
 }
 @keyframes beat {
 	0% { transform: rotate(10deg) scale(1); }
