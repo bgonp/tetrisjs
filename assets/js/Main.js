@@ -109,17 +109,15 @@ class Main {
 				$(this).toggleClass('selected');
 			}
 		});
-		$('#container .settings-content .tetromino').each(function() {
-			let tetromino = $(this);
-			let index = tetromino.data('index');
-			let value = shapes[index].toString(2).padStart(8, '0');
-			tetromino.find('a').each(function(){
-				let block = $(this);
-				if (value[block.data('position')] === '1')
-					block.addClass('selected');
+		shapes.forEach((shape, index) => {
+			let element = $('<div/>').addClass('tetromino').data('index',index);
+			let value = shape.toString(2).padStart(8, '0');
+			for (let i = 0; i < 8; i++) {
+				let block = $('<a href="#"/>').data('position', i);
+				if (value[i] === '1') block.addClass('selected');
 				block.click(function(e) {
-					let block = $(this);
 					e.preventDefault();
+					let block = $(this);
 					if (Board.playing) {
 						Main.alert(message);
 					} else if (!block.hasClass('selected') || block.parent().find('.selected').length > 2) {
@@ -129,7 +127,9 @@ class Main {
 						block.toggleClass('selected');
 					}
 				});
-			});
+				element.append(block);
+			}
+			$('#container .settings-content').append(element);
 		});
 	}
 

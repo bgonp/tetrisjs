@@ -262,7 +262,7 @@ class Board {
 		Board.tetromino.finish();
 		Board.playing = false;
 		Board.container.find('.combo').removeClass('combo');
-		Board.message('GAME OVER :(');
+		Board.message('GAME OVER');
 		Main.accordion(true);
 		Main.startButton.text('NEW GAME');
 	}
