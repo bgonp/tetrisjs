@@ -26,6 +26,7 @@ class Main {
 		Main.interval = 0;
 		Main.timeout = 0;
 		Main.blocked = false;
+		Main.startButton = $('#container .start');
 
 		Board.init();
 		Main.initSettings();
@@ -37,27 +38,18 @@ class Main {
 			icons: null
 		});
 
-		$('#container .start').click((e) => {
+		Main.startButton.click((e) => {
 			e.preventDefault();
-			if (Board.playing) {
-				Main.alert('This will end your current game. Are you sure?', () => {
-					Board.finish();
-					Main.clear();
-					Board.start();
-				});
-			} else if (!Board.playing) {
-				Main.clear();
+			if (Board.playing)
+				Main.alert('This will end your current game. Are you sure?', Board.finish);
+			else if (!Board.playing)
 				Board.start();
-			}
 		});
 
 		win.keydown((e) => {
 			if (Main.blocked) return;
 			if (!Board.playing) {
-				if (e.key === 's') {
-					Main.clear();
-					Board.start();
-				}
+				if (e.key === 's') Board.start();
 				return;
 			}
 			switch (e.key) {
@@ -143,7 +135,8 @@ class Main {
 
 	static initAlert() {
 		Main.alertBox = $('#container .alert');
-		Main.alertBox.find('.close, .cancel, .ok').click(() => {
+		Main.alertBox.find('.close, .cancel, .ok').click((e) => {
+			e.preventDefault();
 			Main.alertBox.fadeOut(50);
 			Main.blocked = false;
 		});

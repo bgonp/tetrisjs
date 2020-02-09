@@ -48,7 +48,9 @@ class Board {
 			Board.message();
 			Board.next = new Tetromino(Board.delay);
 			Board.add();
+			Main.clear();
 			Main.accordion(false);
+			Main.startButton.text('FINISH');
 		}
 	}
 
@@ -123,7 +125,7 @@ class Board {
 			Board.container.append(block.element);
 		}
 		for (let block of Board.tetromino.blocks)
-			if (Board.isFilled(block.position) && !Board.switch())
+			if (Board.isFilled(block.position) && (autoSwitch || !Board.switch()))
 				Board.finish();
 		if (Board.playing) {
 			for (let block of Board.tetromino.projection)
@@ -256,11 +258,13 @@ class Board {
 	}
 
 	static finish() {
+		if (Board.paused) Board.pause();
 		Board.tetromino.finish();
 		Board.playing = false;
 		Board.container.find('.combo').removeClass('combo');
-		Board.message('GAME OVER');
+		Board.message('GAME OVER :(');
 		Main.accordion(true);
+		Main.startButton.text('NEW GAME');
 	}
 
 	static message(text = '', timeout = 0) {
