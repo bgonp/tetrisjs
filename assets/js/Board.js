@@ -48,6 +48,7 @@ class Board {
 			Board.message();
 			Board.next = new Tetromino(Board.delay);
 			Board.add();
+			Main.accordion(false);
 		}
 	}
 
@@ -56,6 +57,7 @@ class Board {
 		Board.paused = Board.tetromino.pause();
 		Board.container.find('.block').fadeToggle(30);
 		Board.message(Board.paused ? 'PAUSED' : false);
+		Main.accordion(Board.paused);
 	}
 
 	static move(direction) {
@@ -77,18 +79,19 @@ class Board {
 
 	static switch() {
 		if (Board.paused || !Board.playing) return;
-		let canSwitch = true;
+		let canSwitch;
 		let previous = Board.current;
 		for (let i = 0; i < Board.boards.length; i++) {
 			Board.current = (Board.current+1) % Board.boards.length;
 			if (Board.current !== previous) {
-				for (let block of Board.tetromino.blocks)
+				for (let block of Board.tetromino.blocks) {
+					canSwitch = true;
 					if (Board.isFilled(block.position)) {
 						canSwitch = false;
 						break;
 					}
+				}
 				if (canSwitch) break;
-				else canSwitch = true;
 			}
 		}
 		if (canSwitch) {
@@ -100,9 +103,10 @@ class Board {
 			}
 			Board.tetromino.project();
 			Board.tetromino.setTimeout();
-		} else {
-			Board.current = previous;
+			return true;
 		}
+		Board.current = previous;
+		return false;
 	}
 
 	static add() {
@@ -119,7 +123,7 @@ class Board {
 			Board.container.append(block.element);
 		}
 		for (let block of Board.tetromino.blocks)
-			if (Board.isFilled(block.position))
+			if (Board.isFilled(block.position) && !Board.switch())
 				Board.finish();
 		if (Board.playing) {
 			for (let block of Board.tetromino.projection)
@@ -169,33 +173,36 @@ class Board {
 		rows.sort((a, b) => a - b);
 		for (let row of rows) {
 			cleared = true;
-			for (let col = 0; col < COLS && cleared; col++) {
+			for (let col = 0; col < COLS && cleared; col++)
 				if (Board.getCells()[col][row] === false)
 					cleared = false;
-			}
 			if (cleared) {
 				lines++;
 				Board.clearRow(row);
 			}
 		}
 		if (lines > 0) {
-			if (Board.current === Board.lastCleared || Board.lastCleared === null)
-				Board.multiplier = 1;
-			else
-				Board.multiplier += 0.25;
-			for (let i = 0; i < Board.boards.length; i++)
-				if (i === Board.current)
-					Board.boards[i].element.removeClass('combo');
+			if (!autoSwitch) {
+				if (Board.current === Board.lastCleared || Board.lastCleared === null)
+					Board.multiplier = 1;
 				else
-					Board.boards[i].element.addClass('combo');
+					Board.multiplier += 0.25;
+				for (let i = 0; i < Board.boards.length; i++)
+					if (i === Board.current)
+						Board.boards[i].element.removeClass('combo');
+					else
+						Board.boards[i].element.addClass('combo');
+			}
 			let points = 100*(Math.pow(lines, 3));
-			Board.message('+'+points+' (x'+Board.multiplier+')', 2000);
+			let message = '+'+points+(Board.multiplier > 1 ? ' (x'+Board.multiplier+')':'');
+			Board.message(message, 2000);
 			points *= Math.floor(Board.multiplier);
 			Board.score += points;
 			Board.updateScore();
 			Board.lastCleared = Board.current;
 		}
 		Board.add();
+		if (autoSwitch && lines > 0) Board.switch();
 	}
 
 	static getLeft(col) {
@@ -236,7 +243,7 @@ class Board {
 
 	static updateScore() {
 		let score = parseInt(Board.scoreboard.text()) + 5;
-		let mult = Board.multiplier > 1 ? '<span>x'+Board.multiplier+'</span>':'';
+		let mult = Board.multiplier > 1 ? '<span>x'+Board.multiplier.toFixed(2)+'</span>':'';
 		if (score > Board.score) {
 			Board.scoreboard.finish().html(Board.score+mult);
 		} else {
@@ -253,6 +260,7 @@ class Board {
 		Board.playing = false;
 		Board.container.find('.combo').removeClass('combo');
 		Board.message('GAME OVER');
+		Main.accordion(true);
 	}
 
 	static message(text = '', timeout = 0) {

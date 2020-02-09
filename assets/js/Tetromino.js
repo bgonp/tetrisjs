@@ -1,11 +1,12 @@
 class Tetromino {
 
 	constructor(delay) {
-		delay = 100000; // TODO BORRAR
 		this.delay = delay;
 		this.blocks = [];
 		this.projection = [];
-		this.shape = shapes[Math.floor(Math.random()*shapes.length)];
+		let index = Math.floor(Math.random()*shapes.length);
+		this.shape = shapes[index];
+		this.color = colors[index];
 		let shape = this.shape.toString(2).padStart(8, '0');
 		let row = this.shape < 16 ? -1 : 0;
 		for (let i = 0; i < 8; ++i) {
@@ -14,7 +15,7 @@ class Tetromino {
 					col: Math.floor(COLS/2 - 2 + i % 4),
 					row: i < 4 ? row : row + 1
 				};
-				this.blocks.push(new Block(position, this.shape));
+				this.blocks.push(new Block(position, this.color));
 				this.projection.push(new Block(position));
 			}
 		}
@@ -65,8 +66,8 @@ class Tetromino {
 			if (col < limits.minCol) limits.minCol = col;
 			if (row > limits.maxRow) limits.maxRow = row;
 			if (row < limits.minRow) limits.minRow = row;
-			if (this.blocks[i].position.row === limits.maxRow) blocks.bottom++;
-			else blocks.top++;
+			if (this.blocks[i].position.row === limits.minRow) blocks.top++;
+			else blocks.bottom++;
 		}
 		let width = limits.maxCol - limits.minCol;
 		let height = limits.maxRow - limits.minRow;

@@ -1,14 +1,15 @@
 class Block {
 	
-	constructor(position, shape = 0) {
+	constructor(position, color = false) {
 		this.position = { col: position.col, row: position.row };
 		this.element = $('<div></div>');
-		this.element.addClass('block shape-'+shape);
+		this.element.addClass('block');
+		this.projection = !Boolean(color);
 		this.element.css({ height: 100/ROWS+'%', width: 100/COLS+'%' });
-		this.shape = shape;
-		if (this.shape > 0) {
+		if (!this.projection) {
 			this.square = $('<div></div>');
 			this.square.addClass('square');
+			this.square.css('background', color);
 			this.element.append(this.square);
 			this.shadow = $('<div></div>');
 			this.shadow.addClass('shadow');
@@ -71,12 +72,12 @@ class Block {
 		this.element.finish();
 		this.position = { col: position.col, row: position.row };
 		let css = { left: Board.getLeft(this.position.col), top: Board.getTop(this.position.row) };
-		if (this.shape > 0) this.element.animate(css, 80);
+		if (!this.projection) this.element.animate(css, 80);
 		else this.element.css(css);
 	}
 
 	remove() {
-		if (this.shape > 0) {
+		if (!this.projection) {
 			this.element.css('z-index', 20).animate({
 				height: 400/ROWS+'%',
 				width: 400/COLS+'%',
