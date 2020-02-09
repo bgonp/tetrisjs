@@ -1,0 +1,211 @@
+html, body {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	overflow: hidden;
+	font-size: 10px;
+	font-family: 'Play', sans-serif;
+	color: #494949;
+	background: #1a2640;
+}
+* {
+	box-sizing: border-box;
+}
+*:focus {
+	outline: none;
+}
+p {
+	margin: 0 0 1rem;
+}
+#container {
+	position: relative;
+	margin: 3rem auto;
+}
+#container .modal {
+	position: absolute;
+	top: 10rem;
+	left: 50%;
+	width: 100%;
+	text-align: center;
+	font-size: 3.5rem;
+	font-weight: 700;
+	transform: translate(-50%, 0);
+	z-index: 30;
+	text-shadow: 2px 2px #FFD836, 0 0 .5rem #FFFFFF;
+}
+#container .modal .letter {
+	display: inline-block;
+	vertical-align: top;
+	min-width: 1rem;
+}
+#container .panel {
+	position: absolute;
+	top: 0;
+	left: calc(100% + 4rem);
+	width: 24rem;
+}
+#container .box,
+#container .board {
+	border: 1px solid #000000;
+	border-radius: 3px;
+	background: #FAFAFA;
+	box-shadow: inset 0 0 2rem rgba(0,0,0,.1), 0 0 1.5rem rgba(255,255,255,.25);
+	margin: -1px;
+}
+#container .board.combo {
+	box-shadow: inset 0 0 2rem #FFD836, 0 0 1.5rem rgba(255,255,255,.25);
+}
+#container .board.combo::after {
+	content: 'COMBO';
+	position: absolute;
+	top: 0;
+	right: 1.5rem;
+	font-size: 3rem;
+	line-height: 6rem;
+	font-weight: 700;
+	transform: rotate(10deg);
+	text-shadow: 2px 2px #FFD836, 0 0 .5rem #FFFFFF;
+	animation: beat .8s ease infinite alternate;
+}
+#container .box {
+	width: 100%;
+	margin-bottom: 1.5rem;
+	overflow: hidden;
+}
+#container .predictor {
+	height: 8rem;
+}
+#container .scoreboard,
+#container .levelboard {
+	font-size: 2.4rem;
+	line-height: 1;
+	text-align: right;
+	padding: 1rem 1.5rem;
+}
+#container .scoreboard span {
+	float: left;
+}
+#container .start,
+#container .help,
+#container .controls,
+#container .settings {
+	display: block;
+	color: #494949;
+	padding: 1.5rem;
+	text-align: center;
+	text-decoration: none;
+	font-size: 2.4rem;
+	line-height: 1;
+}
+#container .start {
+	background: #FFD836;
+}
+#container .help,
+#container .controls,
+#container .settings {
+	margin: 0;
+	border: none;
+	font-family: 'Play', sans-serif;
+	font-size: 2rem;
+	padding: 1rem;
+	border-radius: 0;
+}
+#container .levelboard,
+#container .controls,
+#container .settings {
+	border-top: 1px solid rgba(0,0,0,.1);
+}
+#container .help-content,
+#container .controls-content,
+#container .settings-content {
+	font-family: 'Play', sans-serif;
+	font-size: 1.4rem;
+	padding: 1.5rem 1.5rem 0;
+	border: none;
+}
+#container .ui-state-active {
+	color: #494949;
+	background: #FFD836;
+}
+#container .settings-content .tetromino {
+	width: 8rem;
+	height: 4rem;
+	margin-bottom: 1rem;
+}
+#container .settings-content .tetromino a {
+	float: left;
+	width: 2rem;
+	height: 2rem;
+	border: 1px solid rgba(0,0,0,.1);
+	border-radius: 2px;
+	box-shadow: inset -2px -2px 2px rgba(0,0,0,.05), inset 2px 2px 2px rgba(255,255,255,.2);
+	z-index: 3;
+}
+#container .settings-content .tetromino a.selected {
+	background: #888888;
+}
+#container .board, .block {
+	position: absolute;
+}
+#container .block .square {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border: 1px solid rgba(0,0,0,.1);
+	border-radius: 2px;
+	background: #888888;
+	box-shadow: inset -2px -2px 2px rgba(0,0,0,.05), inset 2px 2px 2px rgba(255,255,255,.2);
+	z-index: 3;
+}
+#container .block.shape-0 {
+	background: #CCDDEE;
+}
+#container .board .block .square {
+	z-index: 1;
+}
+#container .block.shape-15 .square {
+	background: #FFD836;
+} 
+#container .block.shape-78 .square {
+	background: #f58d41;
+} 
+#container .block.shape-102 .square {
+	background: #b565f3;
+} 
+#container .block.shape-108 .square {
+	background: #f54c95;
+} 
+#container .block.shape-198 .square {
+	background: #427EFF;
+} 
+#container .block.shape-226 .square {
+	background: #7ce634;
+} 
+#container .block.shape-232 .square {
+	background: #4ceae7;
+}
+#container .block .shadow {
+	position: absolute;
+	top: -2px;
+	right: -2px;
+	bottom: -2px;
+	left: -2px;
+	background: #BCD;
+	border-radius: 2px;
+	z-index: 2;
+}
+#container .block .projection {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #BCD;
+}
+@keyframes beat {
+	0% { transform: rotate(10deg) scale(1); }
+	100% { transform: rotate(10deg) scale(1.2); }
+}

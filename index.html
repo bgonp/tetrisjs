@@ -4,14 +4,123 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content= "width=device-width, initial-scale=1.0">
 	<title>Tetris</title>
-	<!--<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
-	<link href="assets/css/font-awesome.min.css" rel="stylesheet">
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
 	<link rel="stylesheet" href="assets/css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Play:400,700&display=swap" rel="stylesheet">
 	<script src="assets/js/jquery-3.4.1.min.js"></script>
-	<script src="assets/js/main.js"></script>
+	<script src="assets/js/jquery-ui.min.js"></script>
+	<script src="assets/js/Block.js"></script>
+	<script src="assets/js/Tetromino.js"></script>
+	<script src="assets/js/Board.js"></script>
+	<script src="assets/js/Main.js"></script>
 </head>
 <body>
+	<div id="container">
+		<div class="panel">
+			<div class="predictor box"></div>
+			<div class="box">
+				<div class="scoreboard">0</div>
+				<div class="levelboard">LEVEL 0</div>
+			</div>
+			<a href="#" class="start box">NEW GAME</a>
+			<div class="buttons box">
+				<a href="#" class="help">HELP</a>
+				<div class="help-content">
+					<p>Place tetraminos on the board to make full lines. You play in two boards and you can switch between them whenever you want by pressing 'c'.</p>
+					<p>The more lines you make at once, the more points you earn:<br>
+						- <strong>1 line</strong>: 100 points<br>
+						- <strong>2 lines</strong>: 800 points<br>
+						- <strong>3 lines</strong>: 2700 points<br>
+						- <strong>4 lines</strong>: 6400 points<br>
+						Win small extra points by lower a tetramino pressing 'space'.</p>
+					<p>Earn points multiplier by swithcing between boards. If you clear a line and the previous cleared one was in other board, then the multiplier will be incremented by 0.25</p>
+				</div>
+				<a href="#" class="controls">CONTROLS</a>
+				<div class="controls-content">
+					<p><strong>Left / Right arrows</strong><br>Move blocks left /right</p>
+					<p><strong>Down arrow</strong><br>Move blocks fast down</p>
+					<p><strong>Space</strong><br>Translate blocks to the bottom</p>
+					<p><strong>Up Arrow</strong><br>Rotate blocks</p>
+					<p><strong>C key</strong><br>Switch between boards</p>
+					<p><strong>Escape</strong><br>Pause the game</p>
+					<p><strong>S key</strong><br>Start a new game</p>
+				</div>
+				<a href="#" class="settings">SETTINGS</a>
+				<div class="settings-content">
+					<div class="tetromino" data-index="0">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="1">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="2">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="3">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="4">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="5">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+					<div class="tetromino" data-index="6">
+						<a href="#" data-position="0"></a>
+						<a href="#" data-position="1"></a>
+						<a href="#" data-position="2"></a>
+						<a href="#" data-position="3"></a>
+						<a href="#" data-position="4"></a>
+						<a href="#" data-position="5"></a>
+						<a href="#" data-position="6"></a>
+						<a href="#" data-position="7"></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal"></div>
+	</div>
 </body>
 </html>
