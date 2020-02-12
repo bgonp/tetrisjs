@@ -63,6 +63,7 @@ class Main {
 		Main.blocked = false;
 		Main.startButton = $('#container .start');
 		Main.pauseButton = $('#container .pause');
+		Main.controls = $('#controls');
 		var message = 'This will end your current game. Are you sure?';
 		Main.startButton.click((e) => {
 			e.preventDefault();
@@ -72,6 +73,25 @@ class Main {
 		Main.pauseButton.click((e) => {
 			e.preventDefault();
 			Board.pause();
+		});
+		Main.controls.find('a').on('touchstart', function(e) {
+			if (Main.blocked || !Board.playing || Board.paused)	return;
+			let key = $(this).data('action');
+			switch (key) {
+				case 'left': Main.action(key, Board.move, LEFT, true); break;
+				case 'switch': if (!autoSwitch) Main.action(key, Board.switch); break;
+				case 'right': Main.action(key, Board.move, RIGHT, true); break;
+				case 'down': Main.action(key, Board.move, DOWN, true); break;
+				case 'bottom': Main.action(key, Board.move, BOTTOM); break;
+				case 'rotate': Main.action(key, Board.rotate); break;
+				default: return;
+			}
+			e.preventDefault();
+		});
+		Main.controls.find('a').on('touchend', function(e) {
+			let key = $(this).data('action');
+			if (Main.repeating === key) Main.clear();
+			if (Main.pressing === key) Main.pressing = null;
 		});
 		Main.window.keydown((e) => {
 			if (Main.blocked) return;
@@ -168,16 +188,22 @@ class Main {
 
 	/**
 	 * Actualiza el tamaño base para que se actualicen todos los elementos y quepan
-	 * en el tamaño de la pantalla.
+	 * en el tamaño de la pantalla. Muestra los controles móviles si la pantalla es
+	 * suficientemente alargada.
 	 */
 	static resize() {
 		let windowHeight = Main.window.innerHeight();
 		let windowWidth = Main.window.innerWidth();
 		let gameHeight = ROWS*4+4;
 		let gameWidth = Math.max(COLS*2+30, COLS*4+6)*2;
+		let controlsHeight = 40;
 		for (var base = 12; base >= 4; base-=1)
 			if (gameHeight*base < windowHeight && gameWidth*base < windowWidth)
 				break;
+		if (height - gameHeight*base > controlsHeight*base)
+			Main.controls.show();
+		else
+			Main.controls.hide();
 		$('html').css('font-size', base+'px');
 	}
 
