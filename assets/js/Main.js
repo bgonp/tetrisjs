@@ -26,13 +26,30 @@ class Main {
 	 * Método principal a llamar al inicio y que inicializa todo el programa.
 	 */
 	static run() {
+		Main.initMessage();
 		Board.init();
+		Main.initSize();
 		Main.initControls();
 		Main.initAccordion();
 		Main.initSettings();
-		Main.initSize();
-		Main.initMessage();
 		Main.initAlert();
+	}
+
+	/**
+	 * Inicializa el contenedor donde aparecen los mensajes de juego.
+	 */
+	static initMessage() {
+		Main.messageBox = $('#container .modal');
+	}
+
+	/**
+	 * Crea el listener que llama a resize cada vez que la ventana cambia de tamaño
+	 * y pone el tamaño inicial.
+	 */
+	static initSize() {
+		Main.window = $(window);
+		Main.resize();
+		Main.window.resize(Main.resize);
 	}
 
 	/**
@@ -137,23 +154,6 @@ class Main {
 	}
 
 	/**
-	 * Crea el listener que llama a resize cada vez que la ventana cambia de tamaño
-	 * y pone el tamaño inicial.
-	 */
-	static initSize() {
-		Main.window = $(window);
-		Main.resize();
-		Main.window.resize(Main.resize);
-	}
-
-	/**
-	 * Inicializa el contenedor donde aparecen los mensajes de juego.
-	 */
-	static initMessage() {
-		Main.messageBox = $('#container .modal');
-	}
-
-	/**
 	 * Inicializa la caja de alertas y los listeners de sus botones.
 	 */
 	static initAlert() {
@@ -171,12 +171,12 @@ class Main {
 	 * en el tamaño de la pantalla.
 	 */
 	static resize() {
-		let windowWidth = Main.window.innerWidth();
 		let windowHeight = Main.window.innerHeight();
-		let gameWidth = Math.max(COLS*2+30, COLS*4+6)*2;
+		let windowWidth = Main.window.innerWidth();
 		let gameHeight = ROWS*4+4;
+		let gameWidth = Math.max(COLS*2+30, COLS*4+6)*2;
 		for (var base = 12; base >= 4; base-=1)
-			if (gameHeight*base < height && gameWidth*base < width)
+			if (gameHeight*base < windowHeight && gameWidth*base < windowWidth)
 				break;
 		$('html').css('font-size', base+'px');
 	}
@@ -222,6 +222,11 @@ class Main {
 		clearTimeout(Main.timeout);
 	}
 
+	/**
+	 * Muestra el diálogo de alerta con el mensaje especificado. Si se especifica
+	 * una función callback, se mostrarán botones de confirmación y se ejecutará
+	 * solo si el usuario confirma.
+	 */
 	static alert(message, callback = false) {
 		Main.blocked = true;
 		if (Board.playing && !Board.paused) Board.pause();
