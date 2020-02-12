@@ -200,7 +200,7 @@ class Main {
 		for (var base = 12; base >= 4; base-=1)
 			if (gameHeight*base < windowHeight && gameWidth*base < windowWidth)
 				break;
-		if (height - gameHeight*base > controlsHeight*base)
+		if (windowHeight > windowWidth && windowHeight - gameHeight*base > controlsHeight*base)
 			Main.controls.show();
 		else
 			Main.controls.hide();
