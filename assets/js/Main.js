@@ -63,6 +63,76 @@ class Main {
 	}
 
 	/**
+	 * Inicializa los conroles de juego y sus listeners.
+	 */
+	static initControls() {
+		Main.pressing = null;
+		Main.repeating = null;
+		Main.interval = 0;
+		Main.timeout = 0;
+		Main.blocked = false;
+		Main.startButton = $('#container .start');
+		Main.pauseButton = $('#container .pause');
+		Main.controls = $('#controls');
+		var message = 'This will end your current game. Are you sure?';
+		Main.startButton.click((e) => {
+			e.preventDefault();
+			if (!Board.playing) Board.start();
+			else Main.alert(message, Board.finish);
+		});
+		Main.pauseButton.click((e) => {
+			e.preventDefault();
+			Board.pause();
+		});
+		Main.controls.find('a').on('touchstart', function(e) {
+			if (Main.blocked || !Board.playing || Board.paused)	return;
+			let key = $(this).data('action');
+			switch (key) {
+				case 'left': Main.action(key, Board.move, LEFT, true); break;
+				case 'switch': if (!autoSwitch) Main.action(key, Board.switch); break;
+				case 'right': Main.action(key, Board.move, RIGHT, true); break;
+				case 'down': Main.action(key, Board.move, DOWN, true); break;
+				case 'bottom': Main.action(key, Board.move, BOTTOM); break;
+				case 'rotate': Main.action(key, Board.rotate); break;
+				default: return;
+			}
+			e.preventDefault();
+		});
+		Main.controls.find('a').on('touchend', function(e) {
+			let key = $(this).data('action');
+			if (Main.repeating === key) Main.clear();
+			if (Main.pressing === key) Main.pressing = null;
+		});
+		Main.window.keydown((e) => {
+			if (Main.blocked) return;
+			if (!Board.playing) {
+				if (e.key === 's') Main.action(e.key, Board.start);
+				return;
+			}
+			switch (e.key) {
+				case 'c': if (!autoSwitch) Main.action(e.key, Board.switch); break;
+				case 'ArrowLeft': Main.action(e.key, Board.move, LEFT, true); break;
+				case 'ArrowRight': Main.action(e.key, Board.move, RIGHT, true); break;
+				case 'ArrowDown': Main.action(e.key, Board.move, DOWN, true); break;
+				case ' ': Main.action(e.key, Board.move, BOTTOM); break;
+				case 'ArrowUp': Main.action(e.key, Board.rotate); break;
+				case 'p': case 'Escape': Main.action(e.key, Board.pause); break;
+				case 's': Main.action(e.key, Main.alert.bind(undefined, message, Board.start)); break;
+				default: return;
+			}
+			e.preventDefault();
+		});
+		Main.window.keyup((e) => {
+			if (Main.repeating === e.key) {
+				Main.clear();
+				Board.undo();
+			}
+			if (Main.pressing === e.key)
+				Main.pressing = null;
+		});
+	}
+
+	/**
 	 * Inicializa el acordeón de ayuda, controles y opciones.
 	 */
 	static initAccordion() {
@@ -169,16 +239,22 @@ class Main {
 
 	/**
 	 * Actualiza el tamaño base para que se actualicen todos los elementos y quepan
-	 * en el tamaño de la pantalla.
+	 * en el tamaño de la pantalla. Muestra los controles móviles si la pantalla es
+	 * suficientemente alargada.
 	 */
 	static resize() {
 		let windowHeight = Main.window.innerHeight();
 		let windowWidth = Main.window.innerWidth();
 		let gameHeight = ROWS*4+4;
 		let gameWidth = Math.max(COLS*2+30, COLS*4+6)*2;
+		let controlsHeight = 40;
 		for (var base = 12; base >= 4; base-=1)
 			if (gameHeight*base < windowHeight && gameWidth*base < windowWidth)
 				break;
+		if (height - gameHeight*base > controlsHeight*base)
+			Main.controls.show();
+		else
+			Main.controls.hide();
 		$('html').css('font-size', base+'px');
 	}
 
@@ -274,7 +350,7 @@ class Main {
 			Main.showLetter(letter.next());
 		});
 	}
-	
+
 }
 
 $(document).ready(Main.run);
