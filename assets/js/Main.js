@@ -48,6 +48,7 @@ class Main {
 		Main.blocked = false;
 		Main.startButton = $('#container .start');
 		Main.pauseButton = $('#container .pause');
+		Main.controls = $('#controls');
 		Main.messageBox = $('#container .modal');
 		Main.alertBox = $('#container .alert');
 		Main.accordionButtons = $('#container .buttons');
@@ -66,14 +67,6 @@ class Main {
 	 * Inicializa los conroles de juego y sus listeners.
 	 */
 	static initControls() {
-		Main.pressing = null;
-		Main.repeating = null;
-		Main.interval = 0;
-		Main.timeout = 0;
-		Main.blocked = false;
-		Main.startButton = $('#container .start');
-		Main.pauseButton = $('#container .pause');
-		Main.controls = $('#controls');
 		var message = 'This will end your current game. Are you sure?';
 		Main.startButton.click((e) => {
 			e.preventDefault();
