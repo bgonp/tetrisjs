@@ -208,6 +208,25 @@ class Main {
 			e.preventDefault();
 			Board.pause();
 		});
+		Main.controls.find('a').on('touchstart', function(e) {
+			if (Main.blocked || !Board.playing || Board.paused)	return;
+			let key = $(this).data('action');
+			switch (key) {
+				case 'left': Main.action(key, Board.move, LEFT, true); break;
+				case 'switch': if (!autoSwitch) Main.action(key, Board.switch); break;
+				case 'right': Main.action(key, Board.move, RIGHT, true); break;
+				case 'down': Main.action(key, Board.move, DOWN, true); break;
+				case 'bottom': Main.action(key, Board.move, BOTTOM); break;
+				case 'rotate': Main.action(key, Board.rotate); break;
+				default: return;
+			}
+			e.preventDefault();
+		});
+		Main.controls.find('a').on('touchend', function(e) {
+			let key = $(this).data('action');
+			if (Main.repeating === key) Main.clear();
+			if (Main.pressing === key) Main.pressing = null;
+		});
 		Main.window.keydown((e) => {
 			if (Main.blocked) return;
 			if (!Board.playing) {
