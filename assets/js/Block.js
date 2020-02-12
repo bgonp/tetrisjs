@@ -86,8 +86,8 @@ class Block {
 	/**
 	 * Mueve el bloque a la posición indicada como parámetro.
 	 */
-	moveTo(position, finish = true) {
-		this.translate(position, ANIMATION_TIME, finish, true);
+	moveTo(destination, finish = true) {
+		this.translate(destination, ANIMATION_TIME, finish, true);
 	}
 
 	/**
@@ -99,6 +99,7 @@ class Block {
 			this.element.finish();
 		else
 			this.element.stop(true, false);
+		this.setPrevious(clearPrevious);
 		this.position = {
 			col: destination.col,
 			row: destination.row
@@ -118,7 +119,6 @@ class Block {
 		} else {
 			this.element.css(css);
 		}
-		this.setPrevious(clearPrevious);
 	}
 
 	/**
