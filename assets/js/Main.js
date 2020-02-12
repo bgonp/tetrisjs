@@ -26,36 +26,21 @@ class Main {
 	 * Método principal a llamar al inicio y que inicializa todo el programa.
 	 */
 	static run() {
-		Main.initMessage();
+		Main.initVars();
 		Board.init();
 		Main.initSize();
-		Main.initControls();
 		Main.initAccordion();
 		Main.initSettings();
 		Main.initAlert();
+		Main.initControls();
 	}
 
-	/**
-	 * Inicializa el contenedor donde aparecen los mensajes de juego.
-	 */
-	static initMessage() {
-		Main.messageBox = $('#container .modal');
-	}
 
 	/**
-	 * Crea el listener que llama a resize cada vez que la ventana cambia de tamaño
-	 * y pone el tamaño inicial.
+	 * Inicializa las variables necesarias para la ejecución del programa.
 	 */
-	static initSize() {
+	static initVars() {
 		Main.window = $(window);
-		Main.resize();
-		Main.window.resize(Main.resize);
-	}
-
-	/**
-	 * Inicializa los conroles de juego y sus listeners.
-	 */
-	static initControls() {
 		Main.pressing = null;
 		Main.repeating = null;
 		Main.interval = 0;
@@ -63,50 +48,24 @@ class Main {
 		Main.blocked = false;
 		Main.startButton = $('#container .start');
 		Main.pauseButton = $('#container .pause');
-		var message = 'This will end your current game. Are you sure?';
-		Main.startButton.click((e) => {
-			e.preventDefault();
-			if (!Board.playing) Board.start();
-			else Main.alert(message, Board.finish);
-		});
-		Main.pauseButton.click((e) => {
-			e.preventDefault();
-			Board.pause();
-		});
-		Main.window.keydown((e) => {
-			if (Main.blocked) return;
-			if (!Board.playing) {
-				if (e.key === 's') Main.action(e.key, Board.start);
-				return;
-			}
-			switch (e.key) {
-				case 'c': if (!autoSwitch) Main.action(e.key, Board.switch); break;
-				case 'ArrowLeft': Main.action(e.key, Board.move, LEFT, true); break;
-				case 'ArrowRight': Main.action(e.key, Board.move, RIGHT, true); break;
-				case 'ArrowDown': Main.action(e.key, Board.move, DOWN, true); break;
-				case ' ': Main.action(e.key, Board.move, BOTTOM); break;
-				case 'ArrowUp': Main.action(e.key, Board.rotate); break;
-				case 'p': case 'Escape': Main.action(e.key, Board.pause); break;
-				case 's': Main.action(e.key, Main.alert.bind(undefined, message, Board.start)); break;
-				default: return;
-			}
-			e.preventDefault();
-		});
-		Main.window.keyup((e) => {
-			if (Main.repeating === e.key) {
-				Main.clear();
-				Board.undo();
-			}
-			if (Main.pressing === e.key)
-				Main.pressing = null;
-		});
+		Main.messageBox = $('#container .modal');
+		Main.alertBox = $('#container .alert');
+		Main.accordionButtons = $('#container .buttons');
+	}
+
+	/**
+	 * Crea el listener que llama a resize cada vez que la ventana cambia de tamaño
+	 * y pone el tamaño inicial.
+	 */
+	static initSize() {
+		Main.resize();
+		Main.window.resize(Main.resize);
 	}
 
 	/**
 	 * Inicializa el acordeón de ayuda, controles y opciones.
 	 */
 	static initAccordion() {
-		Main.accordionButtons = $('#container .buttons');
 		Main.accordionButtons.accordion({
 			active: false,
 			collapsible: true,
@@ -157,13 +116,55 @@ class Main {
 	 * Inicializa la caja de alertas y los listeners de sus botones.
 	 */
 	static initAlert() {
-		Main.alertBox = $('#container .alert');
 		Main.alertBox.find('.close, .cancel, .ok').click((e) => {
 			e.preventDefault();
 			Main.alertBox.fadeOut(50);
 			Main.blocked = false;
 		});
 		Main.alertBox.find('.ok').click(() => Main.confirmed());
+	}
+
+	/**
+	 * Inicializa los conroles de juego y sus listeners.
+	 */
+	static initControls() {
+		var message = 'This will end your current game. Are you sure?';
+		Main.startButton.click((e) => {
+			e.preventDefault();
+			if (!Board.playing) Board.start();
+			else Main.alert(message, Board.finish);
+		});
+		Main.pauseButton.click((e) => {
+			e.preventDefault();
+			Board.pause();
+		});
+		Main.window.keydown((e) => {
+			if (Main.blocked) return;
+			if (!Board.playing) {
+				if (e.key === 's') Main.action(e.key, Board.start);
+				return;
+			}
+			switch (e.key) {
+				case 'c': if (!autoSwitch) Main.action(e.key, Board.switch); break;
+				case 'ArrowLeft': Main.action(e.key, Board.move, LEFT, true); break;
+				case 'ArrowRight': Main.action(e.key, Board.move, RIGHT, true); break;
+				case 'ArrowDown': Main.action(e.key, Board.move, DOWN, true); break;
+				case ' ': Main.action(e.key, Board.move, BOTTOM); break;
+				case 'ArrowUp': Main.action(e.key, Board.rotate); break;
+				case 'p': case 'Escape': Main.action(e.key, Board.pause); break;
+				case 's': Main.action(e.key, Main.alert.bind(undefined, message, Board.start)); break;
+				default: return;
+			}
+			e.preventDefault();
+		});
+		Main.window.keyup((e) => {
+			if (Main.repeating === e.key) {
+				Main.clear();
+				Board.undo();
+			}
+			if (Main.pressing === e.key)
+				Main.pressing = null;
+		});
 	}
 
 	/**
