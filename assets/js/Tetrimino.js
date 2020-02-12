@@ -1,12 +1,24 @@
-class Tetromino {
+/**
+ * Clase que representa un tetriminó. Esta compuesto de sus bloques reales y
+ * otros bloques que indican la proyección del tetriminó en la posició más baja
+ */
+class Tetrimino {
 
+	/**
+	 * Crea el objeto con un intervalo pasado como parámetro y cada vez que
+	 * transcurre ese intervalo, baja una posición. La forma del tetriminó será
+	 * una aleatoria de entre las contenidas en la constante SHAPES y con su
+	 * color asociado dentro de la constante COLORS. Para generar la forma del
+	 * tetriminó se usa un número de 8 bits ya que es una matriz de 2 x 8
+	 * posiciones las cuales pueden tener bloque o no.
+	 */
 	constructor(delay) {
 		this.delay = delay;
 		this.blocks = [];
 		this.projection = [];
-		let index = Math.floor(Math.random()*shapes.length);
-		this.shape = shapes[index];
-		this.color = colors[index];
+		let index = Math.floor(Math.random()*SHAPES.length);
+		this.shape = SHAPES[index];
+		this.color = COLORS[index];
 		let shape = this.shape.toString(2).padStart(8, '0');
 		let row = this.shape < 16 ? -1 : 0;
 		for (let i = 0; i < 8; ++i) {
@@ -22,17 +34,20 @@ class Tetromino {
 		this.getCenter();
 	}
 
+	/**
+	 * Inicializa el intervalo de bajar el tetriminó, comprueba que en la
+	 * posición actual puede bajar y crea la proyección de los bloques en la
+	 * posición más baja posible del tablero.
+	 */
 	start() {
 		this.interval = setInterval(() => this.move(DOWN), this.delay);
 		this.setTimeout();
-		for (let i = 0; i < this.projection.length; i++)
-			this.projection[i].element.css({
-				height: this.blocks[i].element.css('height'),
-				width: this.blocks[i].element.css('width')
-			});
 		this.project();
 	}
 
+	/**
+	 * Pausa o reanuda el progreso del tetriminó.
+	 */
 	pause() {
 		if (this.interval || this.timeout) {
 			clearInterval(this.interval);
@@ -45,6 +60,10 @@ class Tetromino {
 		return false;
 	}
 
+	/**
+	 * Finaliza el progreso del tetriminó y elimina los bloques sombra y
+	 * proyección.
+	 */
 	finish() {
 		clearInterval(this.interval);
 		this.interval = null;
@@ -56,6 +75,10 @@ class Tetromino {
 		}
 	}
 
+	/**
+	 * Calcula el centro de los bloques que forman el tetriminó para usarlo
+	 * de origen de rotación y referencia de la posición actual.
+	 */
 	getCenter() {
 		let limits = { minCol: COLS, maxCol: -1, minRow: ROWS, maxRow: -1 };
 		let blocks = { top: 0, bottom: 0 };
@@ -76,6 +99,10 @@ class Tetromino {
 			this.center.row = blocks.bottom > blocks.top ? 1 : 0;
 	}
 
+	/**
+	 * Comprueba que el tetriminó pueda moverse hacia abajo y si no es así,
+	 * comienza un timeout para anclarlo al tablero y finalizarlo.
+	 */
 	setTimeout() {
 		if (this.canMove(DOWN)) {
 			clearTimeout(this.timeout);
@@ -83,10 +110,11 @@ class Tetromino {
 		} else if (!this.timeout)
 			this.timeout = setTimeout(Board.stack, DELAY);
 	}
-
-	stopAnimation() {
-	}
-
+	
+	/**
+	 * Comprueba que cada uno de los bloques pueda moverse en la dirección
+	 * indicada como parámetro.
+	 */
 	canMove(direction) {
 		for (let block of this.blocks)
 			if (!block.canMove(direction))
@@ -94,9 +122,13 @@ class Tetromino {
 		return true;
 	}
 
+	/**
+	 * Mueve todos los bloques en la dirección indicada.
+	 */
 	move(direction, animation = true) {
 		if (direction === BOTTOM) {
 			let deep = this.deep();
+			this.lastDirection = BOTTOM;
 			this.center.row += deep;
 			for (let block of this.blocks)
 				block.moveTo({ col: block.position.col, row: block.position.row + deep });
@@ -108,17 +140,22 @@ class Tetromino {
 		} else if (direction === LEFT || direction === RIGHT) {
 			if (!this.canMove(direction))
 				return false;
-			this.center.col = this.center.col + (direction === RIGHT ? 1 : -1);
+			this.center.col += direction === RIGHT ? 1 : -1;
 		}
 		for (let block of this.blocks) {
 			block.move();
 			if (!animation) block.element.finish();
 		}
+		this.lastDirection = direction;
 		this.setTimeout();
 		this.project();
 		return true;
 	}
-
+	
+	/**
+	 * Comprueba que cada uno de los bloques pueda girar en sentido horario
+	 * usando el centro del tetriminó como origen del giro.
+	 */
 	canRotate() {
 		let canRotate = true;
 		let tryMove = false;
@@ -138,8 +175,15 @@ class Tetromino {
 		return canRotate;
 	}
 
+	/**
+	 * Mueve todos los bloques a la posición correspondiente a la rotación,
+	 * actualiza la proyección y comprueba si puede seguir moviéndose hacia
+	 * abajo.
+	 */
 	rotate() {
-		if (!this.canRotate()) return false;
+		if (!this.canRotate())
+			return false;
+		this.lastDirection = false;
 		for (let i = 0; i < this.blocks.length; i++) {
 			this.blocks[i].rotate();
 			this.projection[i].moveTo(this.blocks[i].position);
@@ -149,6 +193,25 @@ class Tetromino {
 		return true;
 	}
 
+	/**
+	 * Intenta deshacer el último movimiento efectuado. Esto es para evitar
+	 * que el tetriminó se haya movido más de lo deseado si la animación
+	 * correspondiente acaba de comenzar. Es lo que se llama 'Coyote Time'.
+	 */
+	undo() {
+		if (this.lastDirection !== LEFT && this.lastDirection !== RIGHT) return;
+		for (let block of this.blocks) if (!block.undoable) return;
+		for (let block of this.blocks) block.moveTo(block.previous, false);
+		this.center.col += this.lastDirection === LEFT ? 1 : -1;
+		this.lastDirection = false;
+		this.project();
+	}
+
+	/**
+	 * Mueve los bloques de proyección a la posición más baja posible para
+	 * proyectar la posición final de la pieza si no se moviera lateralmente
+	 * ni se rotase.
+	 */
 	project() {
 		let deep = this.deep();
 		for (let i = 0; i < this.blocks.length; i++) {
@@ -160,6 +223,10 @@ class Tetromino {
 		}
 	}
 
+	/**
+	 * Devuelve cuántas posiciones puede moverse el tetriminó desde la posición
+	 * actual hacia abajo.
+	 */
 	deep() {
 		let deep = 0;
 		let canMove;

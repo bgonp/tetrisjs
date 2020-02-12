@@ -6,7 +6,6 @@ html, body {
 	left: 0;
 	margin: 0;
 	overflow: hidden;
-	font-size: 10px;
 	font-family: 'Play', sans-serif;
 	color: #494949;
 	background: #1a2640;
@@ -22,7 +21,7 @@ p {
 }
 #container {
 	position: relative;
-	margin: 3rem auto;
+	margin: 2rem auto;
 }
 #container .modal {
 	position: absolute;
@@ -34,7 +33,7 @@ p {
 	font-weight: 700;
 	transform: translate(-50%, 0);
 	z-index: 4;
-	text-shadow: 2px 2px #FFD836, 0 0 .5rem #FFFFFF;
+	text-shadow: .2rem .2rem #FFD836, 0 0 .5rem #FFFFFF;
 }
 #container .modal .letter {
 	display: inline-block;
@@ -59,7 +58,7 @@ p {
 	background: #FFFFFF;
 	padding: 2rem 3rem 2rem 2rem;
 	border-top: 1px solid rgba(0,0,0,.1);
-	border-radius: 3px;
+	border-radius: .3rem;
 	box-shadow: 0 0 1rem rgba(0,0,0,.3);
 	z-index: 10;
 }
@@ -69,10 +68,14 @@ p {
 	right: -1rem;
 	width: 3rem;
 	height: 3rem;
+	font-size: 2.4rem;
+	line-height: 3rem;
+	text-align: center;
+	color: #494949;
 	background: #FFD836;
-	border-radius: 50%;
+	border-radius: .3rem;
 	box-shadow: 0 0 1rem rgba(0,0,0,.5);
-}
+}/*
 #container .alert .content .close::before,
 #container .alert .content .close::after {
     content: '';
@@ -82,12 +85,12 @@ p {
     background: #494949;
     width: .5rem;
     height: 2rem;
-    border-radius: 3px;
+    border-radius: .3rem;
 	transform: rotate(-45deg);
 }
 #container .alert .content .close::after {
 	transform: rotate(45deg);
-}
+}*/
 #container .alert .content .ok,
 #container .alert .content .cancel {
 	display: none;
@@ -98,16 +101,17 @@ p {
 	float: left;
 	font-family: 'Play', sans-serif;
 	font-size: 1.6rem;
-	line-height: 2.5rem;
+	line-height: 2.8rem;
 	text-align: center;
-	width: 8rem;
+	width: 10rem;
 	box-shadow: none;
-    padding: 0;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 3px;
-    margin: 1.6rem 1rem 0 0;
-    background: #FFD836;
-    cursor: pointer;
+	padding: 0;
+	border: 1px solid rgba(0,0,0,0.1);
+	border: none;
+	border-radius: .3rem;
+	margin: 1.6rem 1rem 0 0;
+	background: #FFD836;
+	cursor: pointer;
 }
 #container .alert.confirmable .content .cancel {
 	background: #BBCCDD;
@@ -120,12 +124,12 @@ p {
 	position: absolute;
 	top: 0;
 	left: calc(100% + 4rem);
-	width: 24rem;
+	width: 26rem;
 }
 #container .box,
 #container .board {
 	border: 1px solid #000000;
-	border-radius: 3px;
+	border-radius: .3rem;
 	background: #FAFAFA;
 	box-shadow: inset 0 0 2rem rgba(0,0,0,.1), 0 0 1.5rem rgba(255,255,255,.25);
 	margin: -1px;
@@ -143,7 +147,7 @@ p {
 	line-height: 6rem;
 	font-weight: 700;
 	transform: rotate(10deg);
-	text-shadow: 2px 2px #FFD836, 0 0 .5rem #FFFFFF;
+	text-shadow: .2rem .2rem #FFD836, 0 0 .5rem #FFFFFF;
 	animation: beat .8s ease infinite alternate;
 	z-index: 30;
 }
@@ -166,12 +170,13 @@ p {
 	float: left;
 }
 #container .start,
+#container .pause,
 #container .help,
 #container .controls,
 #container .settings {
 	display: block;
 	color: #494949;
-	padding: 1.5rem;
+	padding: 1rem;
 	text-align: center;
 	text-decoration: none;
 	font-size: 2.4rem;
@@ -179,6 +184,7 @@ p {
 }
 #container .start {
 	background: #FFD836;
+	border-radius: .3rem;
 }
 #container .help,
 #container .controls,
@@ -192,7 +198,8 @@ p {
 }
 #container .levelboard,
 #container .controls,
-#container .settings {
+#container .settings,
+#container .pause {
 	border-top: 1px solid rgba(0,0,0,.1);
 }
 #container .help-content,
@@ -200,7 +207,7 @@ p {
 #container .settings-content {
 	font-family: 'Play', sans-serif;
 	font-size: 1.4rem;
-	padding: 1.5rem;
+	padding: 1.5rem 1.5rem 0;
 	border: none;
 	overflow: hidden;
 }
@@ -224,8 +231,8 @@ p {
 	width: 2rem;
 	height: 2rem;
 	border: 1px solid rgba(0,0,0,.1);
-	border-radius: 2px;
-	box-shadow: inset -2px -2px 2px rgba(0,0,0,.05), inset 2px 2px 2px rgba(255,255,255,.2);
+	border-radius: .2rem;
+	box-shadow: inset -.2rem -.2rem .2rem rgba(0,0,0,.05), inset .2rem .2rem .2rem rgba(255,255,255,.2);
 	margin-right: .5rem;
 	vertical-align: middle;
 }
@@ -236,21 +243,21 @@ p {
 	display: inline-block;
 	vertical-align: middle;
 }
-#container .settings-content .tetromino {
+#container .settings-content .tetrimino {
 	display: inline-block;
 	width: 8rem;
 	height: 4rem;
 	margin: .5rem;
 }
-#container .settings-content .tetromino a {
+#container .settings-content .tetrimino a {
 	float: left;
 	width: 2rem;
 	height: 2rem;
 	border: 1px solid rgba(0,0,0,.1);
-	border-radius: 2px;
-	box-shadow: inset -2px -2px 2px rgba(0,0,0,.05), inset 2px 2px 2px rgba(255,255,255,.2);
+	border-radius: .2rem;
+	box-shadow: inset -.2rem -.2rem .2rem rgba(0,0,0,.05), inset .2rem .2rem .2rem rgba(255,255,255,.2);
 }
-#container .settings-content .tetromino a.selected {
+#container .settings-content .tetrimino a.selected {
 	background: #888888;
 }
 #container .board, .block {
@@ -261,11 +268,11 @@ p {
 	width: 100%;
 	height: 100%;
 	border: 1px solid rgba(0,0,0,.1);
-	border-radius: 2px;
-	box-shadow: inset -2px -2px 2px rgba(0,0,0,.05), inset 2px 2px 2px rgba(255,255,255,.2);
+	border-radius: .2rem;
+	box-shadow: inset -.2rem -.2rem .2rem rgba(0,0,0,.05), inset .2rem .2rem .2rem rgba(255,255,255,.2);
 	z-index: 3;
 }
-#container .block {
+#container .block.projection {
 	background: #CCDDEE;
 }
 #container .board .block .square {
@@ -278,7 +285,7 @@ p {
 	bottom: -2px;
 	left: -2px;
 	background: #BBCCDD;
-	border-radius: 2px;
+	border-radius: .2rem;
 	z-index: 2;
 }
 #container .block .projection {
@@ -288,6 +295,25 @@ p {
 	width: 100%;
 	height: 100%;
 	background: #BBCCDD;
+}
+#controls {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	display: grid;
+	grid-template-columns: auto auto auto;
+}
+#controls a {
+	display: block;
+	width: 100%;
+    font-size: 10rem;
+    line-height: 20rem;
+	text-align: center;
+    border: 1px solid rgba(0,0,0,0.1);
+	color: #494949;
+    background: #FFD836;
+
 }
 @keyframes beat {
 	0% { transform: rotate(10deg) scale(1); }
