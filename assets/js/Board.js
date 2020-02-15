@@ -75,7 +75,7 @@ class Board {
 	static pause() {
 		if (!Board.playing) return;
 		Board.paused = Board.tetrimino.pause();
-		Board.container.find('.block').finish().fadeToggle(ANIMATION_TIME);
+		Board.container.find('.block').finish().fadeToggle(ANIMATION_TIME/2);
 		Main.message(Board.paused ? 'PAUSED' : false);
 		Main.pauseButton.text(Board.paused ? 'RESUME' : 'PAUSE');
 		Main.accordion(Board.paused);

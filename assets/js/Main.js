@@ -5,7 +5,7 @@ const DELAY = 750;
 const CONTROL_DELAY = 70;
 const CONTROL_REPEAT = 35;
 const ANIMATION_TIME = 80;
-const COYOTE_TIME = 25; // TODO: Revisar... 20?
+const COYOTE_TIME = 20;
 const RIGHT = 'R';
 const LEFT = 'L';
 const DOWN = 'D';
@@ -33,6 +33,7 @@ class Main {
 		Main.initSettings();
 		Main.initAlert();
 		Main.initControls();
+		Main.initAutoPause();
 	}
 
 
@@ -152,7 +153,7 @@ class Main {
 			}
 		});
 		SHAPES.forEach((shape, index) => {
-			let element = $('<div/>').addClass('tetromino').data('index',index);
+			let element = $('<div/>').addClass('tetrimino').data('index',index);
 			let value = shape.toString(2).padStart(8, '0');
 			for (let i = 0; i < 8; i++) {
 				let block = $('<a href="#"/>').data('position', i);
@@ -246,6 +247,16 @@ class Main {
 			}
 			if (Main.pressing === e.key)
 				Main.pressing = null;
+		});
+	}
+
+	/**
+	 * Pausa el juego cuando la ventana del navegador donde se esta ejecutando pierde
+	 * el foco.
+	 */
+	static initAutoPause() {
+		Main.window.on('blur', () => {
+			if (Board.playing && !Board.paused) Board.pause();
 		});
 	}
 
