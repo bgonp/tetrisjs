@@ -12,6 +12,7 @@ const DOWN = 'D';
 const BOTTOM = 'B';
 const SHAPES = [15, 78, 102, 108, 198, 226, 232];
 const COLORS = ['#FFD836','#f58d41','#b565f3','#f54c95','#427EFF','#7ce634','#4ceae7'];
+const MUSIC = ['E4', 'B3', 'C4', 'D4', 'C4', 'B3', 'A3', 'A3', 'C4', 'E4', 'D4', 'C4', 'B3', 'C4', 'D4', 'E4', 'C4', 'A3', 'A3'];
 
 // Indica si el modo de juego actual es switch manual o automático.
 var autoSwitch = true;
@@ -34,6 +35,7 @@ class Main {
 		Main.initAlert();
 		Main.initControls();
 		Main.initAutoPause();
+		Main.initMusic();
 	}
 
 
@@ -260,6 +262,16 @@ class Main {
 		});
 	}
 
+	static initMusic() {
+		Main.note = 0;
+		Main.piano = Synth.createInstrument('piano');
+	}
+
+	static playNote() {
+		Main.piano.play(MUSIC[Main.note][0], MUSIC[Main.note][1], 1.5);
+		Main.note = (Main.note + 1) % MUSIC.length;
+	}
+
 	/**
 	 * Actualiza el tamaño base para que se actualicen todos los elementos y quepan
 	 * en el tamaño de la pantalla. Muestra los controles móviles si la pantalla es
@@ -304,6 +316,7 @@ class Main {
 				Main.timeout = setTimeout(() =>
 					Main.interval = setInterval(callback.bind(undefined, param), CONTROL_REPEAT),
 				CONTROL_DELAY);
+				Main.playNote();
 			}
 		} else if (Main.pressing !== key){
 			Main.pressing = key;
