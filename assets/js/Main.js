@@ -35,7 +35,7 @@ class Main {
 		Main.initAlert();
 		Main.initControls();
 		Main.initAutoPause();
-		Main.initMusic();
+		//Main.initMusic();
 	}
 
 
