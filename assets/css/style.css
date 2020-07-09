@@ -171,9 +171,7 @@ p {
 }
 #container .start,
 #container .pause,
-#container .help,
-#container .controls,
-#container .settings {
+#container .tab-button {
 	display: block;
 	color: #494949;
 	padding: 1rem;
@@ -186,9 +184,7 @@ p {
 	background: #FFD836;
 	border-radius: .3rem;
 }
-#container .help,
-#container .controls,
-#container .settings {
+#container .tab-button {
 	margin: 0;
 	border: none;
 	font-family: 'Play', sans-serif;
@@ -202,31 +198,30 @@ p {
 #container .pause {
 	border-top: 1px solid rgba(0,0,0,.1);
 }
-#container .help-content,
-#container .controls-content,
-#container .settings-content {
+#container .tab-content {
 	font-family: 'Play', sans-serif;
 	font-size: 1.4rem;
+	line-height: 1.25;
 	padding: 1.5rem 1.5rem 0;
 	border: none;
 	overflow: hidden;
 }
-#container .ui-state-active {
+#container .tab-button.active {
 	color: #494949;
 	background: #FFD836;
 }
-#container .ui-state-disabled {
+#container .tab-button.disabled {
 	opacity: .75;
 }
-#container .settings-content {
+#container #settings-content {
 	text-align: center;
 }
-#container .settings-content .auto-switch {
+#container .tab-content .auto-switch {
 	padding-bottom: 1rem;
 	border-bottom: 1px solid rgba(0,0,0,.1);
 	margin-bottom: 1rem;
 }
-#container .settings-content .auto-switch a {
+#container .tab-content .auto-switch a {
 	display: inline-block;
 	width: 2rem;
 	height: 2rem;
@@ -236,20 +231,20 @@ p {
 	margin-right: .5rem;
 	vertical-align: middle;
 }
-#container .settings-content .auto-switch a.selected {
+#container .tab-content .auto-switch a.selected {
 	background: #FFD836;
 }
-#container .settings-content .auto-switch label {
+#container .tab-content .auto-switch label {
 	display: inline-block;
 	vertical-align: middle;
 }
-#container .settings-content .tetrimino {
+#container .tab-content .tetrimino {
 	display: inline-block;
 	width: 8rem;
 	height: 4rem;
-	margin: .5rem;
+	margin: 0 .5rem 1rem;
 }
-#container .settings-content .tetrimino a {
+#container .tab-content .tetrimino a {
 	float: left;
 	width: 2rem;
 	height: 2rem;
@@ -257,7 +252,7 @@ p {
 	border-radius: .2rem;
 	box-shadow: inset -.2rem -.2rem .2rem rgba(0,0,0,.05), inset .2rem .2rem .2rem rgba(255,255,255,.2);
 }
-#container .settings-content .tetrimino a.selected {
+#container .tab-content .tetrimino a.selected {
 	background: #888888;
 }
 #container .board, .block {

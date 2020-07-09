@@ -50,7 +50,8 @@ class Main {
 		Main.pauseButton = $('#container .pause');
 		Main.messageBox = $('#container .modal');
 		Main.alertBox = $('#container .alert');
-		Main.accordionButtons = $('#container .buttons');
+		Main.accordionButtons = $('#container .tab-button');
+		Main.accordionContents = $('#container .tab-content');
 	}
 
 	/**
@@ -66,10 +67,27 @@ class Main {
 	 * Inicializa el acordeón de ayuda, controles y opciones.
 	 */
 	static initAccordion() {
-		Main.accordionButtons.accordion({
-			active: false,
-			collapsible: true,
-			icons: null
+		Main.accordionButtons.click(function(e) {
+			e.preventDefault();
+			if (this.classList.contains('disabled')) {
+				return;
+			}
+			const target = $('#' + this.dataset.target);
+			if (target.is(':visible')) {
+				target.slideUp();
+				$(this).removeClass('active');
+			} else {
+				Main.accordionButtons.filter('.active').removeClass('active');
+				Main.accordionContents.each((index, element) => {
+					element = $(element);
+					if (element.is(':visible')) {
+						element.slideUp();
+					} else if (target.is(element)) {
+						element.slideDown();
+					}
+				});
+				$(this).addClass('active');
+			}
 		});
 	}
 
@@ -79,7 +97,7 @@ class Main {
 	 */
 	static initSettings() {
 		var message = 'You will can change settings once your current game has been finished';
-		$('#container .settings-content .auto-switch a').click(function(e) {
+		$('#container .tab-content .auto-switch a').click(function(e) {
 			e.preventDefault();
 			if (Board.playing) {
 				Main.alert(message);
@@ -89,7 +107,7 @@ class Main {
 			}
 		});
 		SHAPES.forEach((shape, index) => {
-			let element = $('<div/>').addClass('tetromino').data('index',index);
+			let element = $('<div/>').addClass('tetrimino').data('index',index);
 			let value = shape.toString(2).padStart(8, '0');
 			for (let i = 0; i < 8; i++) {
 				let block = $('<a href="#"/>').data('position', i);
@@ -108,7 +126,7 @@ class Main {
 				});
 				element.append(block);
 			}
-			$('#container .settings-content').append(element);
+			$('#container #settings-content').append(element);
 		});
 	}
 
@@ -186,8 +204,12 @@ class Main {
 	 * Activa o desactiva el acordeón de ayuda, controles y opciones.
 	 */
 	static accordion(enable = true) {
-		Main.accordionButtons.accordion('option', 'active', enable);
-		Main.accordionButtons.accordion('option', 'disabled', !enable);
+		if (enable) {
+			Main.accordionButtons.removeClass('disabled');
+		} else {
+			Main.accordionButtons.addClass('disabled').removeClass('active');
+			Main.accordionContents.slideUp();
+		}
 	}
 
 	/**

@@ -4,12 +4,10 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content= "width=device-width, initial-scale=1.0">
 	<title>TETRIS SWITCH</title>
-	<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
 	<link rel="stylesheet" href="assets/css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Play:400,700&display=swap" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	<script src="assets/js/jquery-3.4.1.min.js"></script>
 	<script src="assets/js/Block.js"></script>
 	<script src="assets/js/Tetrimino.js"></script>
 	<script src="assets/js/Board.js"></script>
@@ -28,8 +26,8 @@
 				<a href="#" class="pause">PAUSE</a>
 			</div>
 			<div class="buttons box">
-				<a href="#" class="help">HELP</a>
-				<div class="help-content">
+				<a href="#" class="help tab-button" data-target="help-content">HELP</a>
+				<div id="help-content" class="tab-content" style="display: none">
 					<p>You will play in two boards and you have two different modes:<br>
 						- <strong>Auto-switch</strong>: Everytime you clear a row the boards switch.<br>
 						- <strong>Manual</strong>: You can switch between boards whenever you want by pressing 'c'.</p>
@@ -41,8 +39,8 @@
 						Win small extra points by lower a tetrimino by pressing 'space'.</p>
 					<p>In manual mode you can get score multipliers by clearing rows alternatively between boards.</p>
 				</div>
-				<a href="#" class="controls">CONTROLS</a>
-				<div class="controls-content">
+				<a href="#" class="controls tab-button" data-target="controls-content">CONTROLS</a>
+				<div id="controls-content" class="tab-content" style="display: none">
 					<p><strong>Left / Right arrows</strong><br>Move blocks left /right</p>
 					<p><strong>Down arrow</strong><br>Move blocks fast down</p>
 					<p><strong>Space</strong><br>Translate blocks to the bottom</p>
@@ -51,8 +49,8 @@
 					<p><strong>Escape</strong><br>Pause the game</p>
 					<p><strong>S key</strong><br>Start a new game</p>
 				</div>
-				<a href="#" class="settings">SETTINGS</a>
-				<div class="settings-content">
+				<a href="#" class="settings tab-button" data-target="settings-content">SETTINGS</a>
+				<div id="settings-content" class="tab-content" style="display: none">
 					<div class="auto-switch">
 						<a href="#" class="selected"></a><label>Auto-switch mode</label>
 					</div>
