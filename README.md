@@ -47,3 +47,10 @@ In manual mode you can get score multipliers by clearing rows alternatively betw
 Tetriminos falling speed will increase gradually to make them harder to handle if the game become longer and longer.
 
 ![Tetris Switch main game](https://raw.githubusercontent.com/bgonp/tetrisjs/master/screenshots/game.png)
+
+## Twitch version: Tetrazos
+
+I also developed a private version of this game with Twitch chat integration used in streams by [**Pazos64**](https://www.twitch.tv/pazos64). You can see it working in [**this video**](https://www.youtube.com/watch?v=H0d7MMKxMcE&feature=youtu.be&t=6678)
+
+![Tetrazos](https://raw.githubusercontent.com/bgonp/tetrisjs/master/screenshots/pazos64.png)
+
